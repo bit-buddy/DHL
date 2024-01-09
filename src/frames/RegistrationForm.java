@@ -39,7 +39,7 @@
             lblNewLabel.setBounds(203, 31, 193, 56);
             frame.getContentPane().add(lblNewLabel);
 
-            JLabel lblNewLabel_1 = new JLabel("Въведете потребителско име:");
+            JLabel lblNewLabel_1 = new JLabel("Въведете име:");
             lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
             lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
             lblNewLabel_1.setBounds(44, 97, 287, 56);
@@ -72,7 +72,7 @@
                     String newInputPass = new String(passwordField.getPassword());
                     String encodedPassword = Base64.getEncoder().encodeToString(newInputPass.getBytes());
                     Client client = new Client(newInputName, encodedPassword);
-
+                    addNewRegistrationToDatabase(newInputName, "_@_.com", "none", encodedPassword);
                     newRegistrations.add(client);
 
                     frame.dispose();

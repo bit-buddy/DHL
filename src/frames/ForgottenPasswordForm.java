@@ -31,7 +31,7 @@ public class ForgottenPasswordForm extends JFrame {
         lblNewLabel.setBounds(150, 35, 258, 54);
         frame.getContentPane().add(lblNewLabel);
 
-        JLabel lblNewLabel_1 = new JLabel("Потребител:");
+        JLabel lblNewLabel_1 = new JLabel("Име:");
         lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblNewLabel_1.setBounds(55, 138, 142, 25);
         frame.getContentPane().add(lblNewLabel_1);
@@ -76,45 +76,8 @@ public class ForgottenPasswordForm extends JFrame {
             DataSource dataSource = manager.getDataSource();
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
-            //connection.prepareStatement("INSERT INTO `doctors` " + "VALUES (" + "`5`" + ","  + "`Soapa`" +  "," +  "`4`" + ",`" +  newPassword + "`,`" + "bla" + "`);");
-            statement.executeQuery("UPDATE doctors SET doctors.password = '" + newPassword + "' WHERE doctors.nameOfDoctor = '" + username+"'");
-            //ResultSet resultSet = statement.executeQuery("SELECT * FROM doctors;");
-            //statement.executeUpdate("INSERT INTO doctors " + "VALUES (" + 5 + ","  + "Soapa" +  "," +  4 + "," +  newPassword + "," + "bla" + ");");
-            /*while(resultSet.next()){
-                if(resultSet.getString(2).equals(username)){
-                    int id = resultSet.getInt(1);
-                    long UIN = resultSet.getLong(3);
-                    String specialty = resultSet.getString(5);
-                    //statement.executeQuery("DELETE FROM doctors WHERE id = " + id +";");
-                    //statement.executeQuery("INSERT INTO doctors (id, nameOfDoctor, UIN, password, specialty) VALUES (" + id + ","  + username +  "," +  UIN + "," +  newPassword + "," + specialty + ");");
-                    return 0;
-                }
-            }
-            resultSet = statement.executeQuery("SELECT nameOfNurse, id FROM nurses;");
-            while(resultSet.next()){
-                if(resultSet.getString(1).equals(username)){
-                    int id = resultSet.getInt(2);
-                    ResultSet changeRegistration = statement.executeQuery("DELETE FROM nurses WHERE id = " + id);
-                    return 0;
-                }
-            }
-            resultSet = statement.executeQuery("SELECT nameOfPatient, id FROM patients");
-            while(resultSet.next()){
-                if(resultSet.getString(1).equals(username)){
-                    int id = resultSet.getInt(2);
-                    ResultSet changeRegistration = statement.executeQuery("DELETE FROM patients WHERE id = " + id);
-                    return 0;
-                }
-            }
-            resultSet = statement.executeQuery("SELECT nameOfWardBoy, id FROM wardboys");
-            while(resultSet.next()){
-                if(resultSet.getString(1).equals(username)){
-                    int id = resultSet.getInt(2);
-                    ResultSet changeRegistration = statement.executeQuery("DELETE FROM wardboys WHERE id = " + id);
-                    return 0;
-                }
-            }
-*/
+            statement.executeQuery("UPDATE customers SET customers.encryptedPassword = '" + newPassword + "' WHERE customers.name = '" + username+"'");
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

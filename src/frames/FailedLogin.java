@@ -16,7 +16,7 @@ public class FailedLogin extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Неуспешен вход");
+        JLabel lblNewLabel = new JLabel("Неуспешен вход!");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 30));
         lblNewLabel.setBounds(84, 63, 263, 113);

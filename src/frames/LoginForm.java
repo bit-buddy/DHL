@@ -32,20 +32,20 @@ public class LoginForm extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Добре дошли! :)");
+        JLabel lblNewLabel = new JLabel("Добре дошли!");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 30));
         lblNewLabel.setBounds(151, 21, 258, 77);
         frame.getContentPane().add(lblNewLabel);
 
-        JLabel lblNewLabel_1 = new JLabel("потребител:");
+        JLabel lblNewLabel_1 = new JLabel("Потребител:");
         lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblNewLabel_1.setBounds(30, 99, 121, 42);
         frame.getContentPane().add(lblNewLabel_1);
         passwordField.setBounds(360, 156, 166, 42);
         frame.getContentPane().add(passwordField);
 
-        JLabel lblNewLabel_1_1 = new JLabel("парола:");
+        JLabel lblNewLabel_1_1 = new JLabel("Парола:");
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblNewLabel_1_1.setBounds(30, 151, 121, 42);
         frame.getContentPane().add(lblNewLabel_1_1);
@@ -65,7 +65,6 @@ public class LoginForm extends JFrame {
                 String username = textField.getText();
                 String password = new String(passwordField.getPassword());
                 String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
-                System.out.println(3 + encodedPassword);
                 if(validInput(username, encodedPassword)){
                     SuccessfulLogin successfulLogin = new SuccessfulLogin();
                 }else{
@@ -113,12 +112,9 @@ public class LoginForm extends JFrame {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT name, encryptedPassword FROM customers");
             while(resultSet.next()){
-                if(resultSet.getString(1).equals(username) && (resultSet.getString(2).equals(encodedPassword)) ){
+                if(resultSet.getString(1).equals(username) && (resultSet.getString(2).equals(encodedPassword)) ) {
                     return true;
                 }
-                System.out.println( "1. " + resultSet.getString(1) + " " + resultSet.getString(2));
-                System.out.println("2. " + username + " " + encodedPassword);
-                System.out.println();
 
             }
         } catch (SQLException e) {
