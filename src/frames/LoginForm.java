@@ -65,9 +65,19 @@ public class LoginForm extends JFrame {
                 String username = textField.getText();
                 String password = new String(passwordField.getPassword());
                 String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
-                if(validInput(username, encodedPassword)){
+                if (validInput(username, encodedPassword)) {
                     SuccessfulLogin successfulLogin = new SuccessfulLogin();
-                }else{
+                    String loggedInCustomer = username;
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            new CustomerOrderInfoFrame(loggedInCustomer).setVisible(true);
+                        }
+                    });
+                }
+
+                else{
                     FailedLogin failedLogin = new FailedLogin();
                 }
                 //frame.dispose();

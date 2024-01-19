@@ -4,7 +4,6 @@ CREATE TABLE customers (
     email VARCHAR(50),
     address VARCHAR(100),
     encryptedPassword VARCHAR(100)
-
 );
 
 CREATE TABLE shipments (
