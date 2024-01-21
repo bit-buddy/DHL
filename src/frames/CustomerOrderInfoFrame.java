@@ -9,8 +9,9 @@ import util.DBManager;
 
 public class CustomerOrderInfoFrame extends JFrame {
     private String loggedInCustomer;
-    private JComboBox<String> orderComboBox;  // Add a JComboBox for orders
+    private JComboBox<String> orderComboBox;
     private JTextArea orderInfoTextArea;
+    private JButton showDescriptionButton;  // Added JButton for showing detailed description
 
     public CustomerOrderInfoFrame(String loggedInCustomer) {
         this.loggedInCustomer = loggedInCustomer;
@@ -30,6 +31,15 @@ public class CustomerOrderInfoFrame extends JFrame {
             }
         });
 
+        // Initialize and add JButton
+        showDescriptionButton = new JButton("Show Detailed Description");
+        showDescriptionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDetailedDescription(loggedInCustomer, (String) orderComboBox.getSelectedItem());
+            }
+        });
+        add(showDescriptionButton, BorderLayout.SOUTH);
 
         // Populate the JComboBox with the customer's orders
         populateOrderComboBox(loggedInCustomer);
@@ -76,8 +86,6 @@ public class CustomerOrderInfoFrame extends JFrame {
         }
     }
 
-
-
     private void displayOrderInfo(String customerName, String trackingNumber) {
         try {
             Connection connection = DBManager.getInstance().getDataSource().getConnection();
@@ -112,4 +120,34 @@ public class CustomerOrderInfoFrame extends JFrame {
         }
     }
 
+    private void showDetailedDescription(String customerName, String trackingNumber) {
+        try {
+            Connection connection = DBManager.getInstance().getDataSource().getConnection();
+            String sqlQuery = "SELECT shipments.detailed_description " +
+                    "FROM shipments " +
+                    "JOIN customers ON shipments.customerId = customers.id " +
+                    "WHERE customers.name = ? AND shipments.trackingNumber = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, customerName);
+            preparedStatement.setString(2, trackingNumber);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String detailedDescription = resultSet.getString("detailed_description");
+                JOptionPane.showMessageDialog(this, "Detailed Description:\n" + detailedDescription,
+                        "Order Detailed Description", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No detailed description available for the selected order.",
+                        "Order Detailed Description", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
