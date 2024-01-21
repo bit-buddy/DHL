@@ -13,7 +13,8 @@ CREATE TABLE shipments (
     destination VARCHAR(100),
     status VARCHAR(20),
     customerId INT,
-    detailed_description TEXT,  -- Added detailed_description column
+    detailed_description TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (customerId) REFERENCES customers(id)
 );
 

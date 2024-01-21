@@ -1,6 +1,7 @@
 package frames;
 
 import util.DBManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,16 +13,14 @@ public class CustomerOrderInfoWindow extends JFrame {
     private JTextArea orderInfoTextArea;
 
     public CustomerOrderInfoWindow() {
-        setTitle("Customer Order Information");
+        setTitle("Customers orders");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initUI();
 
-        // Populate the customer ComboBox
         populateCustomerComboBox();
 
-        // Display order info when a customer is selected
         customerComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -14,7 +14,7 @@ public class Main {
         LoginForm loginScreen = new LoginForm();
     }
 
-    public static void connectionWithDataBase(){
+    public static void connectionWithDataBase() {
         DBManager manager;
         try {
             manager = DBManager.getInstance();
@@ -23,7 +23,7 @@ public class Main {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM customers");
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 System.out.print(resultSet.getString(1) + " ");
                 System.out.print(resultSet.getString(2) + " ");
                 System.out.print(resultSet.getString(3) + " ");

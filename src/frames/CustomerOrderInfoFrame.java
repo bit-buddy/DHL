@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+
 import util.DBManager;
 
 public class CustomerOrderInfoFrame extends JFrame {
@@ -13,26 +14,24 @@ public class CustomerOrderInfoFrame extends JFrame {
     private JTextArea orderInfoTextArea;
     private JButton showDescriptionButton;
     private JButton editDestinationButton;
+    private JButton deleteOrderButton;
 
     public CustomerOrderInfoFrame(String loggedInCustomer) {
         this.loggedInCustomer = loggedInCustomer;
 
         setTitle("Customer Order Information");
-        setSize(400, 300);
+        setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initUI();
 
-        // Display the order info based on the selected order in the JComboBox
         orderComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Selected item: " + orderComboBox.getSelectedItem());
                 displayOrderInfo(loggedInCustomer, (String) orderComboBox.getSelectedItem());
             }
         });
 
-        // Initialize and add JButton
         showDescriptionButton = new JButton("Show Detailed Description");
         showDescriptionButton.addActionListener(new ActionListener() {
             @Override
@@ -49,21 +48,27 @@ public class CustomerOrderInfoFrame extends JFrame {
             }
         });
 
+        deleteOrderButton = new JButton("Delete Order");
+        deleteOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                confirmDeleteOrder(loggedInCustomer, (String) orderComboBox.getSelectedItem());
+            }
+        });
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(showDescriptionButton);
         buttonPanel.add(editDestinationButton);
+        buttonPanel.add(deleteOrderButton);
 
-        // Add buttonPanel to the South region of BorderLayout
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Populate the JComboBox with the customer's orders
         populateOrderComboBox(loggedInCustomer);
     }
 
     private void initUI() {
         setLayout(new BorderLayout());
 
-        // Initialize and add JComboBox
         orderComboBox = new JComboBox<>();
         add(orderComboBox, BorderLayout.NORTH);
 
@@ -81,7 +86,7 @@ public class CustomerOrderInfoFrame extends JFrame {
                     "SELECT DISTINCT shipments.trackingNumber " +
                             "FROM shipments " +
                             "JOIN customers ON shipments.customerId = customers.id " +
-                            "WHERE customers.name = ?"
+                            "WHERE customers.name = ? AND shipments.is_deleted = false"
             );
             preparedStatement.setString(1, customerName);
 
@@ -108,7 +113,7 @@ public class CustomerOrderInfoFrame extends JFrame {
                     "FROM shipments " +
                     "JOIN customers ON shipments.customerId = customers.id " +
                     "JOIN parcels ON parcels.shipmentId = shipments.id " +
-                    "WHERE customers.name = ? AND shipments.trackingNumber = ?";
+                    "WHERE customers.name = ? AND shipments.trackingNumber = ? AND shipments.is_deleted = false";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
             preparedStatement.setString(1, customerName);
@@ -167,7 +172,7 @@ public class CustomerOrderInfoFrame extends JFrame {
     }
 
     private void editOrderDestination(String customerName, String trackingNumber) {
-        // Create a separate window for editing destination
+
         JFrame editDestinationFrame = new JFrame("Edit Destination");
         JPanel editPanel = new JPanel(new GridLayout(3, 2));
 
@@ -180,7 +185,7 @@ public class CustomerOrderInfoFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String newDestination = newDestinationField.getText();
                 updateDestinationInDatabase(customerName, trackingNumber, newDestination);
-                editDestinationFrame.dispose();  // Close the window after updating
+                editDestinationFrame.dispose();
             }
         });
 
@@ -194,7 +199,7 @@ public class CustomerOrderInfoFrame extends JFrame {
     }
 
     private void updateDestinationInDatabase(String customerName, String trackingNumber, String newDestination) {
-        // Implement the logic to update the destination in the database
+
         try {
             Connection connection = DBManager.getInstance().getDataSource().getConnection();
             String sqlQuery = "UPDATE shipments SET destination = ? " +
@@ -211,7 +216,7 @@ public class CustomerOrderInfoFrame extends JFrame {
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(this, "Destination updated successfully",
                         "Update Success", JOptionPane.INFORMATION_MESSAGE);
-                // Update the displayed order information after the update
+
                 displayOrderInfo(customerName, trackingNumber);
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to update destination",
@@ -220,6 +225,46 @@ public class CustomerOrderInfoFrame extends JFrame {
 
             preparedStatement.close();
             connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void confirmDeleteOrder(String customerName, String trackingNumber) {
+        int result = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete this order?",
+                "Confirmation", JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            deleteOrder(customerName, trackingNumber);
+        }
+    }
+
+    private void deleteOrder(String customerName, String trackingNumber) {
+        try {
+            Connection connection = DBManager.getInstance().getDataSource().getConnection();
+            String sqlQuery = "UPDATE shipments SET is_deleted = true " +
+                    "WHERE customerId = (SELECT id FROM customers WHERE name = ?) " +
+                    "AND trackingNumber = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, customerName);
+            preparedStatement.setString(2, trackingNumber);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(this, "Order deleted successfully",
+                        "Deletion Success", JOptionPane.INFORMATION_MESSAGE);
+                populateOrderComboBox(loggedInCustomer); // Refresh the order list after deletion
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete order",
+                        "Deletion Failure", JOptionPane.ERROR_MESSAGE);
+            }
+
+            preparedStatement.close();
+            connection.close();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

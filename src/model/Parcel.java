@@ -6,8 +6,6 @@ public class Parcel {
     private String description;
     private int shipmentId;
 
-    // Getters and Setters for Parcel class
-    // ID
     public int getId() {
         return id;
     }
@@ -16,7 +14,6 @@ public class Parcel {
         this.id = id;
     }
 
-    // Weight
     public double getWeight() {
         return weight;
     }
@@ -25,7 +22,6 @@ public class Parcel {
         this.weight = weight;
     }
 
-    // Description
     public String getDescription() {
         return description;
     }
@@ -34,7 +30,6 @@ public class Parcel {
         this.description = description;
     }
 
-    // ShipmentId
     public int getShipmentId() {
         return shipmentId;
     }

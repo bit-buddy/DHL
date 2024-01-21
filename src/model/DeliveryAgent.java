@@ -6,8 +6,6 @@ public class DeliveryAgent {
     private String vehicleType;
     private boolean availability;
 
-    // Getters and Setters for DeliveryAgent class
-    // ID
     public int getId() {
         return id;
     }
@@ -16,7 +14,6 @@ public class DeliveryAgent {
         this.id = id;
     }
 
-    // Name
     public String getName() {
         return name;
     }
@@ -25,7 +22,6 @@ public class DeliveryAgent {
         this.name = name;
     }
 
-    // VehicleType
     public String getVehicleType() {
         return vehicleType;
     }
@@ -34,7 +30,6 @@ public class DeliveryAgent {
         this.vehicleType = vehicleType;
     }
 
-    // Availability
     public boolean isAvailability() {
         return availability;
     }

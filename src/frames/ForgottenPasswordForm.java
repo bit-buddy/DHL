@@ -69,14 +69,14 @@ public class ForgottenPasswordForm extends JFrame {
         frame.setVisible(true);
     }
 
-    public int changePassword(String username, String newPassword){
+    public int changePassword(String username, String newPassword) {
         DBManager manager;
         try {
             manager = DBManager.getInstance();
             DataSource dataSource = manager.getDataSource();
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
-            statement.executeQuery("UPDATE customers SET customers.encryptedPassword = '" + newPassword + "' WHERE customers.name = '" + username+"'");
+            statement.executeQuery("UPDATE customers SET customers.encryptedPassword = '" + newPassword + "' WHERE customers.name = '" + username + "'");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

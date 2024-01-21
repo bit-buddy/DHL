@@ -7,7 +7,7 @@ public class Client {
     private String address;
     private String encryptedPassword;
 
-    public Client(){
+    public Client() {
         name = "";
         encryptedPassword = "";
     }
@@ -25,7 +25,6 @@ public class Client {
         this.id = id;
     }
 
-    // Name
     public String getName() {
         return name;
     }
@@ -34,7 +33,6 @@ public class Client {
         this.name = name;
     }
 
-    // Email
     public String getEmail() {
         return email;
     }
@@ -43,7 +41,6 @@ public class Client {
         this.email = email;
     }
 
-    // Address
     public String getAddress() {
         return address;
     }
@@ -52,7 +49,6 @@ public class Client {
         this.address = address;
     }
 
-    // EncryptedPassword
     public String getEncryptedPassword() {
         return encryptedPassword;
     }

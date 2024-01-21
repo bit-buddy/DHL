@@ -17,13 +17,9 @@ public class LoginForm extends JFrame {
     private JFrame frame;
     private final JPasswordField passwordField = new JPasswordField();
     private JTextField textField;
-    //private ArrayList<String> inputUsername;
-    //private ArrayList<String> inputPassword;
 
     public LoginForm() {
         initialize();
-        //inputUsername = new ArrayList<String>();
-        //inputPassword = new ArrayList<String>();
     }
 
     private void initialize() {
@@ -75,12 +71,9 @@ public class LoginForm extends JFrame {
                             new CustomerOrderInfoFrame(loggedInCustomer).setVisible(true);
                         }
                     });
-                }
-
-                else{
+                } else {
                     FailedLogin failedLogin = new FailedLogin();
                 }
-                //frame.dispose();
             }
         });
 
@@ -121,8 +114,8 @@ public class LoginForm extends JFrame {
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT name, encryptedPassword FROM customers");
-            while(resultSet.next()){
-                if(resultSet.getString(1).equals(username) && (resultSet.getString(2).equals(encodedPassword)) ) {
+            while (resultSet.next()) {
+                if (resultSet.getString(1).equals(username) && (resultSet.getString(2).equals(encodedPassword))) {
                     return true;
                 }
 

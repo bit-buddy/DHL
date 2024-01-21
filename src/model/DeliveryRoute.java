@@ -14,7 +14,6 @@ public class DeliveryRoute {
         this.id = id;
     }
 
-    // RouteName
     public String getRouteName() {
         return routeName;
     }
@@ -23,7 +22,6 @@ public class DeliveryRoute {
         this.routeName = routeName;
     }
 
-    // AgentId
     public int getAgentId() {
         return agentId;
     }
@@ -32,7 +30,6 @@ public class DeliveryRoute {
         this.agentId = agentId;
     }
 
-    // ShipmentId
     public int getShipmentId() {
         return shipmentId;
     }

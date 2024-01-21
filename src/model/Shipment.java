@@ -8,8 +8,6 @@ public class Shipment {
     private String status;
     private int customerId;
 
-    // Getters and Setters for Shipment class
-    // ID
     public int getId() {
         return id;
     }
@@ -18,7 +16,6 @@ public class Shipment {
         this.id = id;
     }
 
-    // TrackingNumber
     public String getTrackingNumber() {
         return trackingNumber;
     }
@@ -27,7 +24,6 @@ public class Shipment {
         this.trackingNumber = trackingNumber;
     }
 
-    // Origin
     public String getOrigin() {
         return origin;
     }
@@ -36,7 +32,6 @@ public class Shipment {
         this.origin = origin;
     }
 
-    // Destination
     public String getDestination() {
         return destination;
     }
@@ -45,7 +40,6 @@ public class Shipment {
         this.destination = destination;
     }
 
-    // Status
     public String getStatus() {
         return status;
     }
@@ -54,7 +48,6 @@ public class Shipment {
         this.status = status;
     }
 
-    // CustomerId
     public int getCustomerId() {
         return customerId;
     }
