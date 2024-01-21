@@ -11,7 +11,8 @@ public class CustomerOrderInfoFrame extends JFrame {
     private String loggedInCustomer;
     private JComboBox<String> orderComboBox;
     private JTextArea orderInfoTextArea;
-    private JButton showDescriptionButton;  // Added JButton for showing detailed description
+    private JButton showDescriptionButton;
+    private JButton editDestinationButton;
 
     public CustomerOrderInfoFrame(String loggedInCustomer) {
         this.loggedInCustomer = loggedInCustomer;
@@ -39,7 +40,21 @@ public class CustomerOrderInfoFrame extends JFrame {
                 showDetailedDescription(loggedInCustomer, (String) orderComboBox.getSelectedItem());
             }
         });
-        add(showDescriptionButton, BorderLayout.SOUTH);
+
+        editDestinationButton = new JButton("Edit Destination");
+        editDestinationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editOrderDestination(loggedInCustomer, (String) orderComboBox.getSelectedItem());
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(showDescriptionButton);
+        buttonPanel.add(editDestinationButton);
+
+        // Add buttonPanel to the South region of BorderLayout
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // Populate the JComboBox with the customer's orders
         populateOrderComboBox(loggedInCustomer);
@@ -144,6 +159,65 @@ public class CustomerOrderInfoFrame extends JFrame {
             }
 
             resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void editOrderDestination(String customerName, String trackingNumber) {
+        // Create a separate window for editing destination
+        JFrame editDestinationFrame = new JFrame("Edit Destination");
+        JPanel editPanel = new JPanel(new GridLayout(3, 2));
+
+        JLabel newDestinationLabel = new JLabel("Enter new Destination:");
+        JTextField newDestinationField = new JTextField();
+        JButton updateButton = new JButton("Update");
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newDestination = newDestinationField.getText();
+                updateDestinationInDatabase(customerName, trackingNumber, newDestination);
+                editDestinationFrame.dispose();  // Close the window after updating
+            }
+        });
+
+        editPanel.add(newDestinationLabel);
+        editPanel.add(newDestinationField);
+        editPanel.add(updateButton);
+
+        editDestinationFrame.getContentPane().add(BorderLayout.CENTER, editPanel);
+        editDestinationFrame.setSize(300, 150);
+        editDestinationFrame.setVisible(true);
+    }
+
+    private void updateDestinationInDatabase(String customerName, String trackingNumber, String newDestination) {
+        // Implement the logic to update the destination in the database
+        try {
+            Connection connection = DBManager.getInstance().getDataSource().getConnection();
+            String sqlQuery = "UPDATE shipments SET destination = ? " +
+                    "WHERE customerId = (SELECT id FROM customers WHERE name = ?) " +
+                    "AND trackingNumber = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, newDestination);
+            preparedStatement.setString(2, customerName);
+            preparedStatement.setString(3, trackingNumber);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(this, "Destination updated successfully",
+                        "Update Success", JOptionPane.INFORMATION_MESSAGE);
+                // Update the displayed order information after the update
+                displayOrderInfo(customerName, trackingNumber);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update destination",
+                        "Update Failure", JOptionPane.ERROR_MESSAGE);
+            }
+
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
