@@ -13,6 +13,7 @@ CREATE TABLE shipments (
     destination VARCHAR(100),
     status VARCHAR(20),
     customerId INT,
+    detailed_description TEXT,
     FOREIGN KEY (customerId) REFERENCES customers(id)
 );
 
